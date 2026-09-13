@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Docker Hub tag watchdog for voipmonitor/vllm.
+"""Docker Hub tag watchdog for localinferencelab/vllm.
 
 Fetches the newest tags, records them in a SQLite DB (name -> seen),
 and prints ONLY tags that were not seen before. Prints nothing when
@@ -16,7 +16,7 @@ import sqlite3
 import urllib.request
 from datetime import datetime, timezone
 
-REPO = "voipmonitor/vllm"
+REPO = "localinferencelab/vllm"
 API = os.environ.get(
     "VLLM_API",
     "https://hub.docker.com/v2/repositories/{}/tags?page_size=100".format(REPO),

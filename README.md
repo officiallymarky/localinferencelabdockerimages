@@ -1,8 +1,8 @@
 # Docker Hub vLLM Tag Watch — for RTX 6000 / RTX Pro 6000 owners
 
-If you run vLLM on RTX 6000 or RTX Pro 6000 cards (solo or multi-GPU), you almost certainly pull the `voipmonitor/vllm` Docker image. That image gets rebuilt a lot — new CUDA builds, new kernels, FlashAttention updates, upstream vLLM bumps. Manually refreshing `docker pull` is a chore, and you only care when a *new* image is actually available.
+If you run vLLM on RTX 6000 or RTX Pro 6000 cards (solo or multi-GPU), you almost certainly pull the `localinferencelab/vllm` Docker image. That image gets rebuilt a lot — new CUDA builds, new kernels, FlashAttention updates, upstream vLLM bumps. Manually refreshing `docker pull` is a chore, and you only care when a *new* image is actually available.
 
-This is a **zero-cost watcher** for exactly that. It polls the `voipmonitor/vllm` repo on Docker Hub, remembers every tag it has already seen, and **only alerts you when a genuinely new image pushes**. When nothing changed, it says nothing — so it costs nothing to run several times a day and never spams you.
+This is a **zero-cost watcher** for exactly that. It polls the `localinferencelab/vllm` repo on Docker Hub, remembers every tag it has already seen, and **only alerts you when a genuinely new image pushes**. When nothing changed, it says nothing — so it costs nothing to run several times a day and never spams you.
 
 Built as drop-in for the RTX 6000 community: **stdlib-only Python, no dependencies, no account, no API keys.** Drop it on any box next to your inference server and you're done.
 
@@ -10,7 +10,7 @@ Built as drop-in for the RTX 6000 community: **stdlib-only Python, no dependenci
 
 ## What it does
 
-- Queries `hub.docker.com` for the newest `voipmonitor/vllm` tags every time it runs.
+- Queries `hub.docker.com` for the newest `localinferencelab/vllm` tags every time it runs.
 - Keeps a local SQLite DB of every tag previously seen.
 - **Prints new tags only** — name, push time, and a link.
 - **Prints nothing** when nothing is new (the "quiet tick" contract — perfect for cron).
@@ -64,7 +64,7 @@ State defaults to `~/data/` (created on first run) unless you override with env 
 
 | Setting | Default | Notes |
 |---|---|---|
-| Repo watched | `voipmonitor/vllm` | `REPO` constant — RTX 6000 community image |
+| Repo watched | `localinferencelab/vllm` | `REPO` constant — Local Inference Lab vLLM image |
 | API URL | Docker Hub v2 tags endpoint | `VLLM_API` env override (for testing) |
 | DB path | `~/data/vllm_tags.db` | `VLLM_DB` env override |
 | Log path | `~/data/vllm_tags.log` | `LOG_PATH` constant |
@@ -133,7 +133,7 @@ python3 test/serve.py 8001 &
 
 # terminal 2 — from this folder, with a throwaway DB:
 VLLM_API="http://127.0.0.1:8001/tags" VLLM_DB=/tmp/vllm_test.db python3 check_dockerhub_vllm_tags.py
-#   expect: 3 new voipmonitor/vllm image(s):  (fixture has 3 tags)
+#   expect: 3 new localinferencelab/vllm image(s):  (fixture has 3 tags)
 VLLM_API="http://127.0.0.1:8001/tags" VLLM_DB=/tmp/vllm_test.db python3 check_dockerhub_vllm_tags.py
 #   expect: NO output  (proves dedup works — second run is silent)
 
